@@ -1,47 +1,47 @@
 services:
   nginx:
-    image: nginx:latest
+    image: 'nginx:latest'
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     restart: always
     depends_on:
-      - php-fpm
+      - 'php-fpm'
     volumes:
-      - ./:/app
-      - ./.docker/nginx:/etc/nginx/conf.d
-      - ./.docker/log/nginx:/var/log/nginx
-      - ./.docker/ssl:/etc/nginx/ssl
+      - './:/app'
+      - './.docker/nginx:/etc/nginx/conf.d'
+      - './.docker/log/nginx:/var/log/nginx'
+      - './.docker/ssl:/etc/nginx/ssl'
   php-fpm:
     build:
-      context: ./.docker/php
-      dockerfile: ./Dockerfile
+      context: './.docker/php'
+      dockerfile: './Dockerfile'
       args:
-        APP_ENV: ${APP_ENV}
+        APP_ENV: '${APP_ENV}'
     depends_on:
-      - mysql
-      - memcached
+      - 'mysql'
+      - 'memcached'
     volumes:
-      - ./:/app
-      - ./.docker/php/custom-php.ini:/usr/local/etc/php/conf.d/custom-php.ini
-      - ./.docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-      - /app/vendor
+      - './:/app'
+      - './.docker/php/custom-php.ini:/usr/local/etc/php/conf.d/custom-php.ini'
+      - './.docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
+      - '/app/vendor'
   memcached:
-    image: memcached:latest
+    image: 'memcached:latest'
     ports:
-      - "11211:11211"
+      - '11211:11211'
   mysql:
-    image: mysql:latest
-    restart: always
+    image: 'mysql:latest'
+    restart: 'always'
     ports:
-      - "3306:3306"
+      - '3306:3306'
     environment:
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: '${MYSQL_USER}'
+      MYSQL_DATABASE: '${MYSQL_DATABASE}'
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
+      MYSQL_PASSWORD: '${MYSQL_PASSWORD}'
     volumes:
-      - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
-      - mysqldata:/var/lib/mysql
+      - './.docker/mysql/my.cnf:/etc/mysql/my.cnf'
+      - 'mysqldata:/var/lib/mysql'
 volumes:
   mysqldata:
