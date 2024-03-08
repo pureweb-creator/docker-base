@@ -1,0 +1,45 @@
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    depends_on:
+      - php-fpm
+    volumes:
+      - ./:/app
+      - ./.docker/nginx:/etc/nginx/conf.d
+      - ./.docker/log/nginx/access.log:/var/log/nginx/access.log
+      - ./.docker/log/nginx/error.log:/var/log/nginx/error.log
+      - ./.docker/ssl:/etc/nginx/ssl
+  php-fpm:
+    build:
+      dockerfile: ./.docker/php/Dockerfile
+    depends_on:
+      - mysql
+      - memcached
+    volumes:
+      - ./:/app
+      - ./.docker/php/custom-php.ini:/usr/local/etc/php/conf.d/custom-php.ini
+      - ./.docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - /app/vendor
+  memcached:
+    image: memcached:latest
+    ports:
+      - "11211:11211"
+  mysql:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - mysqldata:/var/lib/mysql
+volumes:
+  mysqldata:
