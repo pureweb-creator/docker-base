@@ -15,7 +15,10 @@ services:
       - ./.docker/ssl:/etc/nginx/ssl
   php-fpm:
     build:
-      dockerfile: ./.docker/php/Dockerfile
+      context: ./.docker/php
+      dockerfile: ./Dockerfile
+      args:
+        APP_ENV: ${APP_ENV}
     depends_on:
       - mysql
       - memcached
