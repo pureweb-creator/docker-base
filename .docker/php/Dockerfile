@@ -1,5 +1,6 @@
 FROM php:8.2-fpm
 
+WORKDIR /app
 ARG APP_ENV
 ARG UNAME=docker
 ARG GID=1000
