@@ -2,3 +2,4 @@
 .env
 vendor
 .docker/log/nginx/*.log
+.docker/mysql/mysqldata
